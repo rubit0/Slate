@@ -29,47 +29,35 @@ namespace Slate.UI.Pages
         public NavigationViewModel Model { get; set; }
 
         private readonly Geolocator _geolocator = new Geolocator();
-        private MapIcon _currentPositionNeedle;
+        private bool _pageInitDone;
 
         public NavigationPage()
         {
             Model = new NavigationViewModel();
+            NavigationCacheMode = NavigationCacheMode.Required;
             this.InitializeComponent();
-
         }
 
         private async Task SetupMap()
         {
             MapControlls.Opacity = 0;
             Map.Opacity = 0;
-
+            Map.ZoomLevel = 16;
             Map.MapServiceToken =
                 "UOBcq7qYTGSBYjpdwGvJ~ZoDecyJEsIhjGowIczjaTg~AmjcaSnBVS38715lpzn_KgdYiQf1AZ5KG-mLQHi0QWfPcl0xmo9WftqZ4fZtVUyO";
             Map.StyleSheet = MapStyleSheet.RoadDark();
             Map.TrafficFlowVisible = false;
-            NavigationCacheMode = NavigationCacheMode.Required;
 
-            var accessTatus = await Geolocator.RequestAccessAsync();
-            Map.ZoomLevel = 16;
-
-            switch (accessTatus)
+            switch (await Geolocator.RequestAccessAsync())
             {
                 case GeolocationAccessStatus.Unspecified:
                     break;
                 case GeolocationAccessStatus.Allowed:
                     _geolocator.DesiredAccuracy = PositionAccuracy.High;
                     var position = await _geolocator.GetGeopositionAsync();
-                    Map.Center = position.Coordinate.Point;
-
-                    _currentPositionNeedle = new MapIcon
-                    {
-                        Location = position.Coordinate.Point,
-                        NormalizedAnchorPoint = new Point(0.5, 1.0),
-                        ZIndex = 0
-                    };
-
-                    Model.PersonalLayer.MapElements.Add(_currentPositionNeedle);
-                    PitchAnimation.Begin();
+                    Model.CurrentPosition = position.Coordinate.Point;
+                    Map.Center = Model.CurrentPosition;
+                    FadeInAnimation.Begin();
 
                     _geolocator.PositionChanged += OnGeoPositionChanged;
                     break;
@@ -85,13 +73,16 @@ namespace Slate.UI.Pages
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 Model.CurrentPosition = args.Position.Coordinate.Point;
-                _currentPositionNeedle.Location = args.Position.Coordinate.Point;
             });
         }
 
         private async void Page_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (_pageInitDone)
+                return;
+
             await SetupMap();
+            _pageInitDone = true;
         }
     }
 }

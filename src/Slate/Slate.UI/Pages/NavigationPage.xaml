@@ -15,7 +15,7 @@
                 <ResourceDictionary Source="../Styles/Main.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Storyboard x:Name="PitchAnimation">
+            <Storyboard x:Name="FadeInAnimation">
                 <DoubleAnimation Storyboard.TargetName="Map" 
                                  Storyboard.TargetProperty="Opacity" 
                                  From="0" 
@@ -25,7 +25,7 @@
                                  Storyboard.TargetProperty="Opacity" 
                                  From="0" 
                                  To="100" 
-                                 Duration="0:3"/>
+                                 Duration="0:2"/>
             </Storyboard>
         </ResourceDictionary>
     </Page.Resources>

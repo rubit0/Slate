@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Windows.Devices.Geolocation;
+using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -13,6 +14,7 @@ namespace Slate.UI.ViewModels
 
         public ObservableCollection<MapLayer> Layers { get; }
         public MapElementsLayer PersonalLayer { get; }
+        public MapIcon CurrentPositionIcon { get; }
 
         private Geopoint _geopoint;
         public Geopoint CurrentPosition
@@ -21,6 +23,7 @@ namespace Slate.UI.ViewModels
             set
             {
                 _geopoint = value;
+                CurrentPositionIcon.Location = value;
                 OnPropertyChanged();
             }
         }
@@ -33,6 +36,16 @@ namespace Slate.UI.ViewModels
                 Visible = true,
                 Dispatcher = { CurrentPriority = CoreDispatcherPriority.Normal}
             };
+
+            CurrentPositionIcon = new MapIcon
+            {
+                Tag = "Current",
+                Location = CurrentPosition,
+                NormalizedAnchorPoint = new Point(0.5, 0.5),
+                ZIndex = 0
+            };
+
+            PersonalLayer.MapElements.Add(CurrentPositionIcon);
 
             Layers = new ObservableCollection<MapLayer>(new[] {PersonalLayer});
         }

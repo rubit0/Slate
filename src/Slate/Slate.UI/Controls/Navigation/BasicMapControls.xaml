@@ -29,7 +29,7 @@
 
     <StackPanel Background="{ThemeResource DarkAcrylicElementBrush}">
         <Button Background="Transparent"  Click="OnCenterOrientationClicked">
-            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid x:Name="Compass" RenderTransformOrigin="0.5, 0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <FontIcon FontSize="{StaticResource IconFontSize}" Glyph="&#xE812;" Foreground="IndianRed" />
                 <FontIcon FontSize="{StaticResource IconFontSize}" Glyph="&#xE813;" />
             </Grid>
