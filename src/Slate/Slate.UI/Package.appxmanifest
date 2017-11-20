@@ -1,49 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
-
-  <Identity
-    Name="df1e409e-6d8a-4356-b3e4-1d21c0f9b4b2"
-    Publisher="CN=Ruben"
-    Version="1.0.0.0" />
-
-  <mp:PhoneIdentity PhoneProductId="df1e409e-6d8a-4356-b3e4-1d21c0f9b4b2" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp uap3 iot">
+  <Identity Name="df1e409e-6d8a-4356-b3e4-1d21c0f9b4b2" Publisher="CN=Ruben" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="df1e409e-6d8a-4356-b3e4-1d21c0f9b4b2" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Slate.UI</DisplayName>
     <PublisherDisplayName>Ruben</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
   </Dependencies>
-
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="Slate.UI.App">
-      <uap:VisualElements
-        DisplayName="Slate.UI"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Slate.UI"
-        BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Slate.UI.App">
+      <uap:VisualElements DisplayName="Slate.UI" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Slate.UI" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="portrait" />
+        </uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
-
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="internetClientServer" />
+    <uap3:Capability Name="backgroundMediaPlayback" />
+    <uap:Capability Name="musicLibrary" />
+    <uap:Capability Name="removableStorage" />
+    <iot:Capability Name="systemManagement" />
+    <uap:Capability Name="voipCall" />
+    <DeviceCapability Name="location" />
+    <DeviceCapability Name="webcam" />
+    <DeviceCapability Name="bluetooth" />
   </Capabilities>
 </Package>

@@ -6,9 +6,48 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
-    mc:Ignorable="d">
+    xmlns:navigationControls="using:Slate.UI.Controls.Navigation"
+    mc:Ignorable="d"
+    Loaded="Page_OnLoaded">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/Main.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
+            <Storyboard x:Name="PitchAnimation">
+                <DoubleAnimation Storyboard.TargetName="Map" 
+                                 Storyboard.TargetProperty="Opacity" 
+                                 From="0" 
+                                 To="100" 
+                                 Duration="0:2"/>
+                <DoubleAnimation Storyboard.TargetName="MapControlls" 
+                                 Storyboard.TargetProperty="Opacity" 
+                                 From="0" 
+                                 To="100" 
+                                 Duration="0:3"/>
+            </Storyboard>
+        </ResourceDictionary>
+    </Page.Resources>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <maps:MapControl x:Name="Map"></maps:MapControl>
+        <maps:MapControl x:Name="Map" 
+                         TransitFeaturesVisible="False" 
+                         PedestrianFeaturesVisible="False" 
+                         Layers="{x:Bind Model.Layers, Mode=OneWay}" />
+        
+        <RelativePanel x:Name="MapControlls" 
+                       Margin="40, 60, 40, 110">
+            <navigationControls:PlacesSearchBox x:Name="SearchBox" 
+                                                Map="{x:Bind Map}" 
+                                                CurrentPosition="{x:Bind Model.CurrentPosition, Mode=OneWay}" 
+                                                MinWidth="280" 
+                                                RelativePanel.AlignLeftWithPanel="True" />
+
+            <navigationControls:BasicMapControls Map="{x:Bind Map}" 
+                                                 CurrentPosition="{x:Bind Model.CurrentPosition, Mode=OneWay}" 
+                                                 Margin="0" 
+                                                 RelativePanel.AlignRightWithPanel="True" />
+        </RelativePanel>
     </Grid>
 </Page>

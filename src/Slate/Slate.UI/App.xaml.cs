@@ -66,8 +66,9 @@ namespace Slate.UI
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.FullScreen;
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+
+                    //Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.FullScreen;
+                    rootFrame.Navigate(typeof(Pages.MainPage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();

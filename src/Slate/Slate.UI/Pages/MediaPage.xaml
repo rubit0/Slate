@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Slate.UI.Pages"
+    xmlns:subPages="using:Slate.UI.Pages.Media"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:Windows.UI.Xaml.Media"
@@ -27,14 +28,17 @@
         </Grid.RowDefinitions>
         
         <Pivot x:Name="MediaSource" Grid.Row="0">
-            <PivotItem Header="Folder">
-                <TextBlock>Hello World!</TextBlock>
+            <PivotItem Header="Local">
+                <subPages:LocalMediaPage />
+            </PivotItem>
+            <PivotItem Header="USB">
+                <subPages:LocalMediaPage />
             </PivotItem>
             <PivotItem Header="Phone">
-                <TextBlock>Hello World!</TextBlock>
+                <subPages:PhoneMediaPage />
             </PivotItem>
-            <PivotItem Header="SoundCloud">
-                <TextBlock>Hello World!</TextBlock>
+            <PivotItem Header="Spotfy">
+                <subPages:SpotifyMediaPage />
             </PivotItem>
         </Pivot>
         

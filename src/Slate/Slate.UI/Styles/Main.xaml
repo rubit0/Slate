@@ -1,0 +1,22 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Slate.UI">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <Color x:Key="AcrylBasicElementColor">#9C9C9C</Color>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <Color x:Key="AcrylBasicElementColor">#FF000000</Color>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+    <!--Fonts-->
+    <FontFamily x:Key="IconsFont">Segoe MDL2 Assets</FontFamily>
+    
+    <!--Brushes-->
+    <AcrylicBrush x:Key="DarkAcrylicElementBrush" BackgroundSource="Backdrop" 
+                  TintOpacity="0.4" TintColor="{ThemeResource AcrylBasicElementColor}" 
+                  FallbackColor="#9C9C9C" />
+    
+    <!--Styles-->
+</ResourceDictionary>
