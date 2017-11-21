@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Geolocation;
+using Windows.Devices.SmartCards;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Services.Maps;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
@@ -24,6 +26,8 @@ namespace Slate.UI.Controls.Navigation
         public MapControl Map { get; set; }
         public Geopoint CurrentPosition { get; set; }
 
+        private readonly List<string> _failedMessageItemSource = new List<string> { "No Result found" };
+
         public PlacesSearchBox()
         {
             this.InitializeComponent();
@@ -35,16 +39,20 @@ namespace Slate.UI.Controls.Navigation
                 return;
 
             var result = await MapLocationFinder.FindLocationsAsync(sender.Text, CurrentPosition);
-            if (result.Status == MapLocationFinderStatus.Success)
+            if (result.Status == MapLocationFinderStatus.Success && result.Locations.Any())
                 sender.ItemsSource = LocationSuggestion.CreateFromMapFinderResult(result);
             else
-            {
-                sender.ItemsSource = "No Result";
-            }
+                sender.ItemsSource = _failedMessageItemSource;
         }
 
         private async void OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
+            if (sender.ItemsSource == _failedMessageItemSource)
+            {
+                sender.Text = string.Empty;
+                return;
+            }
+
             var suggestion = args.SelectedItem as LocationSuggestion;
             var route = await MapRouteFinder.GetDrivingRouteAsync(CurrentPosition,
                 suggestion.Location.Point);
@@ -76,8 +84,16 @@ namespace Slate.UI.Controls.Navigation
             }
         }
 
-        private void OnQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void OnQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
+            if (!(args.ChosenSuggestion is LocationSuggestion chosen))
+            {
+                sender.Text = string.Empty;
+                return;
+            }
+
+            var scene = MapScene.CreateFromLocation(chosen.Location.Point);
+            await Map.TrySetSceneAsync(scene);
         }
     }
 }

@@ -75,9 +75,10 @@ namespace Slate.UI.Controls.Navigation
             Map.Heading = 0;
         }
 
-        private void OnLocateMeClicked(object sender, RoutedEventArgs e)
+        private async void OnLocateMeClicked(object sender, RoutedEventArgs e)
         {
-            Map.Center = CurrentPosition;
+            var scene = MapScene.CreateFromLocation(CurrentPosition);
+            await Map.TrySetSceneAsync(scene);
         }
 
         private void OnTrafficClicked(object sender, RoutedEventArgs e)
