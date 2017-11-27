@@ -8,6 +8,7 @@ using Windows.Devices.SmartCards;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Services.Maps;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -18,6 +19,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Slate.UI.Models.Navigation;
+using Slate.UI.Services;
+using Color = System.Drawing.Color;
 
 namespace Slate.UI.Controls.Navigation
 {
@@ -26,17 +29,21 @@ namespace Slate.UI.Controls.Navigation
         public MapControl Map { get; set; }
         public Geopoint CurrentPosition { get; set; }
 
+        private MapRouteFinderResult _currentRouteResult;
         private readonly List<string> _failedMessageItemSource = new List<string> { "No Result found" };
 
         public PlacesSearchBox()
         {
             this.InitializeComponent();
+            FocusResult.Visibility = Visibility.Collapsed;
         }
 
         private async void OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput)
                 return;
+
+            FocusResult.Visibility = Visibility.Collapsed;
 
             var result = await MapLocationFinder.FindLocationsAsync(sender.Text, CurrentPosition);
             if (result.Status == MapLocationFinderStatus.Success && result.Locations.Any())
@@ -54,13 +61,16 @@ namespace Slate.UI.Controls.Navigation
             }
 
             var suggestion = args.SelectedItem as LocationSuggestion;
-            var route = await MapRouteFinder.GetDrivingRouteAsync(CurrentPosition,
+            _currentRouteResult = await MapRouteFinder.GetDrivingRouteAsync(CurrentPosition,
                 suggestion.Location.Point);
 
-            switch (route.Status)
+            switch (_currentRouteResult.Status)
             {
                 case MapRouteFinderStatus.Success:
-
+                    FocusResult.Visibility = Visibility.Visible;
+                    NavigationLabel.Text = suggestion.Location.Address.Town;
+                    DescriptionLabel.Text = suggestion.Location.Description;
+                    var thing = await NavigationServices.GetPlaceMetaData(suggestion.Location.Address.Town);
                     break;
                 case MapRouteFinderStatus.UnknownError:
                     break;
@@ -94,6 +104,20 @@ namespace Slate.UI.Controls.Navigation
 
             var scene = MapScene.CreateFromLocation(chosen.Location.Point);
             await Map.TrySetSceneAsync(scene);
+        }
+
+        private async void StartButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(_currentRouteResult == null)
+                return;
+
+            var route = _currentRouteResult.Route;
+            var view = new MapRouteView(route)
+            {
+                RouteColor = Windows.UI.Color.FromArgb(255, 255, 50, 155)
+            };
+            Map.Routes.Add(view);
+            await Map.TrySetViewBoundsAsync(route.BoundingBox, null, MapAnimationKind.Linear);
         }
     }
 }

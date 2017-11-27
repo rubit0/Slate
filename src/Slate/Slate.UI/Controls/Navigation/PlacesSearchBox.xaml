@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
+    d:DesignHeight="1000"
     d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -19,7 +19,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <AutoSuggestBox Grid.Row="0" 
@@ -27,6 +27,36 @@
                         PlaceholderText="Search"
                         TextChanged="OnTextChanged" 
                         SuggestionChosen="OnSuggestionChosen"
-                        QuerySubmitted="OnQuerySubmitted" BorderThickness="0.1" Background="{ThemeResource DarkAcrylicElementBrush}"/>
+                        QuerySubmitted="OnQuerySubmitted" BorderThickness="0.1" 
+                        Background="{ThemeResource DarkAcrylicElementBrush}"/>
+        <Grid Grid.Row="1" x:Name="FocusResult">
+            <Grid Background="CornflowerBlue">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2" MaxWidth="4" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" 
+                            HorizontalAlignment="Left"
+                            Margin="12 0 0 0">
+                    <TextBlock x:Name="NavigationLabel">Title</TextBlock>
+                    <TextBlock x:Name="DescriptionLabel">Description</TextBlock>
+                </StackPanel>
+                <Border Grid.Column="1" Background="SkyBlue" Margin="0 4 0 4" />
+                <Button x:Name="StartButton" 
+                        HorizontalAlignment="Center"
+                        Grid.Column="2" 
+                        Background="Transparent"
+                        Click="StartButton_OnClick" >
+                    <StackPanel>
+                        <FontIcon Glyph="&#xE816;" />
+                        <TextBlock>Directions</TextBlock>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>
